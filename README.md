@@ -29,7 +29,7 @@ development_dependencies:
     github: docelic/specreporter-spec
 ```
 
-Copy the included file `spec/spec_helper.cr` to your code directory or create it yourself with the following content:
+Simply add the following content to your `spec/spec_helper.cr`:
 
 ```crystal
 require "spec"
@@ -49,15 +49,9 @@ Spec.override_default_formatter(
 
 Configure the options to your liking.
 
-And in your specs, just require `spec_helper` instead of `spec`:
+And run tests in the usual way (`crystal s[pec]`).
 
-```crystal
-require "./spec_helper"
-```
-
-Run tests in the usual way (`crystal s[pec]`).
-
-And enjoy!
+Enjoy!
 
 ## TODO
 
