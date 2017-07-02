@@ -1,0 +1,9 @@
+name: specreporter-spec
+version: 0.1.0
+
+authors:
+  - Davor Ocelic <docelic@recore.io>
+
+crystal: 0.22.0
+
+license: Apache-2.0
