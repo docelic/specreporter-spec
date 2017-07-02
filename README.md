@@ -5,7 +5,7 @@ SpecReporter is a spec output formatter for Crystal, similar to Ruby minitest-re
 
 ## Description
 
-Specreporter-spec aims to look and work similar to Ruby's "SpecReporter"
+Specreporter-spec looks and works similar to Ruby's "SpecReporter"
 module from the minitest-reporters gem.
 
 The changes/improvements compared to the default Crystal formatter include:
