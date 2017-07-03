@@ -58,7 +58,7 @@ Enjoy!
 ## TODO
 
 The formatter certainly works, but the implementation must be
-improved before it could be added to Crystal as build-in formatter.
+improved before it could be added to Crystal as built-in formatter.
 
 Code improvements and further feature ideas welcome! Thanks!
 
