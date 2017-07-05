@@ -34,7 +34,8 @@ module Spec
     @description_width : Int32
 
     def initialize(indent_string = "  ", @width = 78, @elapsed_width = 3, @status_width = 5,
-                   skip_errors_report = true, skip_slowest_report = true, skip_failed_report = true)
+                   skip_errors_report = true, skip_slowest_report = true, skip_failed_report = true,
+                   @trim_exceptions = true)
       @indent = 0 # Current level of indent
       @@indent_string = indent_string
       @last_description = ""
@@ -93,8 +94,11 @@ module Spec
       ]
       puts
       if e= result.exception
-        #puts "#<#{e.class}: @message=#{e.message.inspect}, @cause=#{e.cause.inspect}, @callstack=...>"
-        puts Spec.color( "#<#{e.class}: @message=#{e.message.inspect}, @cause=#{e.cause.inspect}, @callstack=...>", result.kind)
+        if @trim_exceptions
+          puts Spec.color( "#<#{e.class}: @message=#{e.message.inspect}, @cause=#{e.cause.inspect}, @callstack=...>", result.kind)
+        else
+          puts Spec.color( e.inspect, result.kind)
+        end
       end
     end
 
