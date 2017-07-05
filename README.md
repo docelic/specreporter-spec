@@ -42,6 +42,7 @@ require "specreporter-spec"
    # ^-- You may need to run "eval `resize`" in term to get COLUMNS variable
    #elapsed_width: 8,     # Number of decimals for "elapsed" time. Default 3
    #status_width: 10,     # Width of the status field. Default 5
+   #trim_exceptions: false,     # Hide callstack from exceptions? Default true
    #skip_errors_report: false,  # Skip default backtraces. Default true
    #skip_slowest_report: false, # Skip default "slowest" report. Default true
    #skip_failed_report: false,  # Skip default failed reports summary. Default true
