@@ -139,7 +139,7 @@ module Spec
   # Crystal 0.23 source. If it causes an error in later versions of Crystal,
   # simply remove the whole class.
   class RootContext < Context
-    def print_results(elapsed_time)
+    def print_results(elapsed_time, aborted)
       Spec.formatters.each(&.finish)
 
       pendings = @results[:pending]
