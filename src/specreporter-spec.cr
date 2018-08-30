@@ -17,7 +17,8 @@ module Spec
   def self.skip_failed_report=(v) @@skip_failed_report=v end
   def self.skip_failed_report; @@skip_failed_report end
 
-  # :nodoc:
+  # This code should be kept to roughly follow VerboseFormatter from
+  # Crystal's src/spec/formatter.cr
   class SpecReporterFormatter < Formatter
 
     # Indent string
@@ -32,10 +33,24 @@ module Spec
     }
 
     @description_width : Int32
+    class Item
+
+      def initialize(@indent : Int32, @description : String)
+        @printed = false
+      end
+
+      def print(io)
+        return if @printed
+        @printed = true
+
+        VerboseFormatter.print_indent(io, @indent)
+        io.puts @description
+      end
+    end
 
     def initialize(indent_string = "  ", @width = 78, @elapsed_width = 3, @status_width = 5,
                    skip_errors_report = true, skip_slowest_report = true, skip_failed_report = true,
-                   @trim_exceptions = true)
+                   @trim_exceptions = true, @io : IO = STDOUT)
       @indent = 0 # Current level of indent
       @@indent_string = indent_string
       @last_description = ""
@@ -57,15 +72,16 @@ module Spec
     end
 
     def print_indent
-      self.class.print_indent(@indent)
+      self.class.print_indent(@io, @indent)
+    end
+
+    def self.print_indent(io, indent)
+      #indent.times { io << make_indent(indent) }
+      io << make_indent(indent)
     end
 
     def make_indent
       self.class.make_indent(@indent)
-    end
-
-    def self.print_indent(indent)
-      print make_indent(indent)
     end
 
     def self.make_indent(indent)
@@ -73,48 +89,36 @@ module Spec
     end
 
     def before_example(description)
-      @items.each &.print
+      @items.each &.print(@io)
       print_indent
-      print description
+      #print description
+      @io << description
       @last_description = description
     end
 
     def report(result)
       unless elapsed= result.elapsed; raise "Missing elapsed data" end
-      print '\r'
+      @io << '\r'
       indent = make_indent
       desc_width = @description_width - indent.size
       elapsed= elapsed.total_seconds.round(@elapsed_width)
       status= "%#{@status_width}s" % @status[result.kind] || result.kind
-      print "%s%-#{desc_width}s %s (%.#{@elapsed_width}fs)" % [
+      @io << "%s%-#{desc_width}s %s (%.#{@elapsed_width}fs)" % [
         indent,
           @last_description[0,desc_width],
           Spec.color( status, result.kind),
           elapsed
       ]
-      puts
+      @io.puts
       if e= result.exception
         if @trim_exceptions
-          puts Spec.color( "#<#{e.class}: @message=#{e.message.inspect}, @cause=#{e.cause.inspect}, @callstack=...>", result.kind)
+          @io.puts Spec.color( "#<#{e.class}: @message=#{e.message.inspect}, @cause=#{e.cause.inspect}, @callstack=...>", result.kind)
         else
-          puts Spec.color( e.inspect, result.kind)
+          @io.puts Spec.color( e.inspect, result.kind)
         end
       end
     end
 
-    class Item
-      def initialize(@indent : Int32, @description : String)
-        @printed = false
-      end
-
-      def print
-        return if @printed
-        @printed = true
-
-        VerboseFormatter.print_indent(@indent)
-        puts @description
-      end
-    end
   end
 
   # This extension is here to keep track of how many assertions were ran.
